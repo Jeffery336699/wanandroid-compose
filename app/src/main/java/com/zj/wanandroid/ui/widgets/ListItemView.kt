@@ -27,6 +27,8 @@ import com.zj.wanandroid.data.bean.CollectBean
 import com.zj.wanandroid.data.bean.WebData
 import com.zj.wanandroid.theme.*
 import com.zj.wanandroid.utils.RegexUtils
+import com.zj.wanandroid.utils.customBorder
+import com.zj.wanandroid.utils.showToast
 
 @Composable
 fun ListTitle(
@@ -283,6 +285,7 @@ fun MultiStateItemView(
                     .padding(start = 5.dp)
                     .clickable {
                         onUserClick.invoke(data.userId)
+                        showToast("userId: ${data.userId}")
                     }
                     .pointerInteropFilter { false },
                 isLoading = isLoading
@@ -318,7 +321,7 @@ fun MultiStateItemView(
                     .constrainAs(title) {
                         top.linkTo(circleText.bottom)
                         end.linkTo(parent.end)
-                    },
+                    }.customBorder(),
                 isLoading = isLoading,
             )
             LabelTextButton(
@@ -361,10 +364,10 @@ fun MultiStateItemView(
                         start.linkTo(name.end, margin = 5.dp)
                     }
             ) {
-                if (isTop) {
+                if (isTop||true) {
                     HotIcon()
                 }
-                if (data.fresh) {
+                if (data.fresh||true) {
                     TagView(
                         tagText = "最新",
                         modifier = Modifier
@@ -373,7 +376,6 @@ fun MultiStateItemView(
                     )
                 }
             }
-
         }
     }
 }

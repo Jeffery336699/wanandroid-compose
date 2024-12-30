@@ -73,6 +73,35 @@ fun FavouriteIcon(
             .width(25.dp)
             .height(25.dp)
             .clickable(enabled = !isLoading) { onClick.invoke() }
+            /**
+             * pointerInteropFilter是一个低级工具，主要用于需要处理原生 Android View系统的事件时,通过pointerInteropFilter，你可以访问底层触摸事件（MotionEvent），从而实现定制化的交互或复用已有逻辑，但建议优先使用 Compose 提供的组合式手势 API，除非确实需要访问原生事件。
+             * 1. 返回true表示事件被拦截并消费。
+             * 2. 返回false表示事件未被消费，会继续向下传递。
+             * 3. 假设你想实现一个自定义的双击手势（传统的GestureDetector）：
+             * ```
+             *  @Composable
+             * fun DoubleTapView(onDoubleTap: () -> Unit) {
+             *     val context = LocalContext.current
+             *     val gestureDetector = remember {
+             *         GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+             *             override fun onDoubleTap(e: MotionEvent?): Boolean {
+             *                 onDoubleTap()
+             *                 return true
+             *             }
+             *         })
+             *     }
+             *
+             *     Box(
+             *         modifier = Modifier
+             *             .fillMaxSize()
+             *             .pointerInteropFilter { motionEvent ->
+             *                 gestureDetector.onTouchEvent(motionEvent)
+             *                 true // 消费事件
+             *             }
+             *     )
+             * }
+             * ```
+             */
             .pointerInteropFilter { false }
     )
 }

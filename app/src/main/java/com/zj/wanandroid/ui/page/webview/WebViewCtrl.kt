@@ -56,7 +56,7 @@ class WebViewCtrl(
         refresh()
     }
 
-    fun refresh() {
+    private fun refresh() {
         webView.loadUrl(linkUrl)
     }
 
@@ -64,6 +64,7 @@ class WebViewCtrl(
     inner class ProgressWebViewChromeClient : WebChromeClient() {
         override fun onProgressChanged(view: WebView?, newProgress: Int) {
             super.onProgressChanged(view, newProgress)
+            println("[ProgressWebViewChromeClient] Progress: $newProgress")
             progressBar.progress = newProgress
         }
 

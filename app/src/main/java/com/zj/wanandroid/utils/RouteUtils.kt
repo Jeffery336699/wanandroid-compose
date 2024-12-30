@@ -54,7 +54,7 @@ object RouteUtils {
                 }
             }
         }
-        println("导航到： $destinationName")
+        println("导航到： $destinationName , singleArgument: $singleArgument")
         navCtrl.navigate("$destinationName$singleArgument") {
             if (backStackRouteName != null) {
                 popUpTo(backStackRouteName) { saveState = true }
