@@ -34,6 +34,22 @@ class LogInterceptor @Inject constructor() : Interceptor {
             .getOrThrow()
     }
 
+    /**
+     *  针对首次登录的情况，注意此时的是user/login接口
+     *       ->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->
+     *      请求 method：POST url:https://www.wanandroid.com/user/login tag:null protocol:http/1.1
+     *      请求 Header:{cookie=[JSESSIONID=0FD7BE2F90F75A07C895D5D85DEE2E97; Secure; HttpOnly; Path=/]}
+     *
+     *  <<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-
+     *      响应 Header:{content-type=[application/json;charset=UTF-8]}
+     *      响应 Header:{date=[Mon, 30 Dec 2024 18:35:50 GMT]}
+     *      响应 Header:{server=[Apache-Coyote/1.1]}
+     *      响应 Header:{set-cookie=[loginUserName=Jeffery; Expires=Wed, 29-Jan-2025 18:35:50 GMT; Path=/, token_pass=3f22f3fd7309b179a34e421b959493b2; Expires=Wed, 29-Jan-2025 18:35:50 GMT; Path=/, loginUserName_wanandroid_com=Jeffery; Domain=wanandroid.com; Expires=Wed, 29-Jan-2025 18:35:50 GMT; Path=/, token_pass_wanandroid_com=3f22f3fd7309b179a34e421b959493b2; Domain=wanandroid.com; Expires=Wed, 29-Jan-2025 18:35:50 GMT; Path=/]}
+     *      响应 Header:{transfer-encoding=[chunked]}
+     *
+     *  {"data":{"admin":false,"chapterTops":[],"coinCount":85,"collectIds":[26254],"email":"","icon":"","id":5569,"nickname":"Jeffery","password":"","publicName":"Jeffery","token":"","type":0,"username":"Jeffery"},"errorCode":0,"errorMsg":""}
+     *  <<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-
+     */
     private fun logResponse(response: Response) {
         val strb = StringBuffer()
         strb.appendLine("\r\n")
@@ -41,12 +57,12 @@ class LogInterceptor @Inject constructor() : Interceptor {
 
         var headerText = ""
         response.headers().toMultimap().forEach { header->
-            headerText += "请求 Header:{${header.key}=${header.value}}\n"
+            headerText += "响应 Header:{${header.key}=${header.value}}\n"
         }
         strb.appendln(headerText)
         kotlin.runCatching {
             //peek类似于clone数据流，监视，窥探，不能直接用原来的body的string流数据作为日志，会消费掉io，所有这里是peek，监测
-            val peekBody: ResponseBody = response.peekBody(1024 * 1024)
+            val peekBody: ResponseBody = response.peekBody(2*1024 * 1024)
             strb.appendln(peekBody.string())
         }.getOrNull()
 
@@ -85,12 +101,18 @@ class LogInterceptor @Inject constructor() : Interceptor {
     private fun logHeaders(strb: StringBuilder, request: Request, connection: Connection?) {
         logBasic(strb, request, connection)
         var headerStr = ""
+        /**
+         * 请求 Header:{cookie=[token_pass_wanandroid_com=3f22f3fd7309b179a34e421b959493b2;loginUserName_wanandroid_com=Jeffery;loginUserName=Jeffery; Expires=Mon, 27-Jan-2025 16:59:00 GMT;token_pass=3f22f3fd7309b179a34e421b959493b2; Domain=wanandroid.com; Path=/]}
+         */
         request.headers().toMultimap().forEach { header->
             headerStr += "请求 Header:{${header.key}=${header.value}}\n"
         }
         strb.appendln(headerStr)
     }
 
+    /**
+     * 请求 method：GET url:https://www.wanandroid.com/user_article/list/0/json tag:null protocol:http/1.1
+     */
     private fun logBasic(strb: StringBuilder, request: Request, connection: Connection?) {
         strb.appendLine(
             "请求 method：${request.method()} url:${decodeUrlStr(request.url().toString())} tag:" +

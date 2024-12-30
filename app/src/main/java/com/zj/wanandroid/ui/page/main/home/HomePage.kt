@@ -6,6 +6,7 @@ import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -19,6 +20,7 @@ import com.zj.wanandroid.ui.page.main.home.square.SquarePage
 import com.zj.wanandroid.ui.widgets.HomeSearchBar
 import com.zj.wanandroid.ui.widgets.TextTabBar
 import com.zj.wanandroid.utils.RouteUtils
+import com.zj.wanandroid.utils.customBorder
 import kotlinx.coroutines.launch
 
 @ExperimentalPagerApi
@@ -54,7 +56,8 @@ fun HomePage(
         HorizontalPager(
             count = titles.size,
             state = pagerState,
-            modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 50.dp)
+            // 默认的private val BottomNavigationHeight = 56.dp
+            modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 56.dp).customBorder(Color.Red)
         ) { page ->
             when (page) {
                 0 -> SquarePage(navCtrl, scaffoldState)

@@ -34,7 +34,8 @@ fun <T : Any> ViewModel.simplePager(
                 PagingSource.LoadResult.Page(
                     data = response.result.data!!.datas,
                     prevKey = if (page - 1 > 0) page - 1 else null,
-                    nextKey = if (hasNotNext) null else page + 1
+                    // Optimize: paging3中如何nextKey为null则表示没有更多了，内部也不会进行下一页的请求
+                    nextKey = if (hasNotNext /*|| page == 2*/) null else page + 1
                 )
             }
             is HttpResult.Error -> {

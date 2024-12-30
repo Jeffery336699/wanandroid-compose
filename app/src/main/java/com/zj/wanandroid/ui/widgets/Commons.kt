@@ -28,6 +28,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.placeholder.material.placeholder
 import com.zj.wanandroid.theme.*
 import com.zj.wanandroid.ui.page.common.BottomNavRoute
+import com.zj.wanandroid.utils.customBorder
 
 /**
  * 普通标题栏头部
@@ -161,6 +162,7 @@ fun TextTabBar(
             .fillMaxWidth()
             .height(54.dp)
             .background(bgColor)
+            .customBorder()
             .horizontalScroll(state = rememberScrollState())
     ) {
         Row(
@@ -262,7 +264,8 @@ fun BottomNavBarView(navCtrl: NavHostController) {
         BottomNavRoute.Collection,
         BottomNavRoute.Profile
     )
-    BottomNavigation {
+    BottomNavigation(modifier = Modifier/*.alpha(0.4f)*/) {
+        // Optimize: 一直是根据当前路由来判断选中状态，相当于这里是状态驱动bottomNavBottom的UI变化（eg选中与否）
         val navBackStackEntry by navCtrl.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
         bottomNavList.forEach { screen ->
@@ -278,9 +281,10 @@ fun BottomNavBarView(navCtrl: NavHostController) {
                 selected = currentDestination?.hierarchy?.any { it.route == screen.routeName } == true,
                 onClick = {
                     println("BottomNavView当前路由 ===> ${currentDestination?.hierarchy?.toList()}")
-                    println("当前路由栈 ===> ${navCtrl.graph.nodes}")
+                    println("[size:${navCtrl.graph.nodes.size()}]当前路由栈 ===> ${navCtrl.graph.nodes}")
                     if (currentDestination?.route != screen.routeName) {
                         navCtrl.navigate(screen.routeName) {
+                            // Optimize: 先把到Home主页的路由全部清除（默认include=false），清除的同时保存状态方便后续恢复，然后才是跳转到目的路由
                             popUpTo(navCtrl.graph.findStartDestination().id) {
                                 saveState = true
                             }

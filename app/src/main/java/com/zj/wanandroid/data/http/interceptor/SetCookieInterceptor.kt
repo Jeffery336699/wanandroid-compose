@@ -13,6 +13,8 @@ class SetCookieInterceptor: Interceptor {
         //获取domain内的cookie
         if (domain.isNotEmpty()) {
             val cookie: String = DataStoreUtils.readStringData(domain, "")
+            // println("111111 domain: $domain")
+            // println("222222 cookie: $cookie")
             if (cookie.isNotEmpty()) {
                 builder.addHeader("Cookie", cookie)
             }

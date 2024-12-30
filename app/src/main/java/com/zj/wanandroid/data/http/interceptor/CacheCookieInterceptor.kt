@@ -10,6 +10,18 @@ class CacheCookieInterceptor: Interceptor {
     private val registerUrl = "user/register"
     private val SET_COOKIE_KEY = "set-cookie"
 
+    /**
+     * Optimize: 注意看这是第一次login（有清除app本地缓存进行的）成功的响应结果，这里的cookie是服务端返回的
+     *  <<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-
+     *  响应 Header:{content-type=[application/json;charset=UTF-8]}
+     *  响应 Header:{date=[Mon, 30 Dec 2024 18:35:50 GMT]}
+     *  响应 Header:{server=[Apache-Coyote/1.1]}
+     *  响应 Header:{set-cookie=[loginUserName=Jeffery; Expires=Wed, 29-Jan-2025 18:35:50 GMT; Path=/, token_pass=3f22f3fd7309b179a34e421b959493b2; Expires=Wed, 29-Jan-2025 18:35:50 GMT; Path=/, loginUserName_wanandroid_com=Jeffery; Domain=wanandroid.com; Expires=Wed, 29-Jan-2025 18:35:50 GMT; Path=/, token_pass_wanandroid_com=3f22f3fd7309b179a34e421b959493b2; Domain=wanandroid.com; Expires=Wed, 29-Jan-2025 18:35:50 GMT; Path=/]}
+     *  响应 Header:{transfer-encoding=[chunked]}
+     *
+     *  {"data":{"admin":false,"chapterTops":[],"coinCount":85,"collectIds":[26254],"email":"","icon":"","id":5569,"nickname":"Jeffery","password":"","publicName":"Jeffery","token":"","type":0,"username":"Jeffery"},"errorCode":0,"errorMsg":""}
+     *  <<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-
+     */
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
         val response = chain.proceed(request)

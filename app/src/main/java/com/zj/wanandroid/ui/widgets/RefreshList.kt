@@ -30,7 +30,7 @@ fun <T : Any> RefreshList(
     lazyPagingItems: LazyPagingItems<T>,
     isRefreshing: Boolean = false,
     onRefresh: (() -> Unit) = {},
-    listState: LazyListState = rememberLazyListState(),
+    listState: LazyListState = rememberLazyListState(), // 简单的逻辑rememberLazyListState够用了，内部有记忆上次位置的能力
     itemContent: LazyListScope.() -> Unit,
 ) {
     val rememberSwipeRefreshState = rememberSwipeRefreshState(isRefreshing = false)
@@ -47,7 +47,7 @@ fun <T : Any> RefreshList(
             lazyPagingItems.refresh()
         }
     ) {
-        //刷新状态
+        //刷新状态 Optimize:Paging3给你暴露了一个loadState.refresh，你可以根据这个可观察的状态来显示不同的UI(比如上面的Error、以及现在Loading等)
         rememberSwipeRefreshState.isRefreshing =
             ((lazyPagingItems.loadState.refresh is LoadState.Loading) || isRefreshing)
         //列表
@@ -66,6 +66,7 @@ fun <T : Any> RefreshList(
                             is LoadState.Loading -> LoadingItem()
                             is LoadState.Error -> ErrorItem { retry() }
                             is LoadState.NotLoading -> {
+                                // Optimize: Paging3中的loadState.append.endOfPaginationReached表示没有更多了
                                 if (loadState.append.endOfPaginationReached) {
                                     NoMoreItem()
                                 }
@@ -85,6 +86,7 @@ fun ErrorContent(retry: () -> Unit) {
             Image(
                 painter = painterResource(id = R.drawable.stat_notify_error),
                 contentDescription = null,
+                // ColorFilter.tint对图片着色，666
                 colorFilter = ColorFilter.tint(Color.Red),
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )

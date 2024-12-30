@@ -16,6 +16,64 @@ data class Hotkey(
     var visible: Int
 )
 
+/**
+ * 数据结构：
+ * ```
+ *  {
+ *     "data": {
+ *         "curPage": 1,
+ *         "datas": [
+ *             {
+ *                 "adminAdd": false,
+ *                 "apkLink": "",
+ *                 "audit": 1,
+ *                 "author": "",
+ *                 "canEdit": false,
+ *                 "chapterId": 494,
+ *                 "chapterName": "广场",
+ *                 "collect": false,
+ *                 "courseId": 13,
+ *                 "desc": "",
+ *                 "descMd": "",
+ *                 "envelopePic": "",
+ *                 "fresh": false,
+ *                 "host": "",
+ *                 "id": 29350,
+ *                 "isAdminAdd": false,
+ *                 "link": "https://juejin.cn/post/7445647912157396992",
+ *                 "niceDate": "1天前",
+ *                 "niceShareDate": "1天前",
+ *                 "origin": "",
+ *                 "prefix": "",
+ *                 "projectLink": "",
+ *                 "publishTime": 1735475641000,
+ *                 "realSuperChapterId": 493,
+ *                 "selfVisible": 0,
+ *                 "shareDate": 1735475641000,
+ *                 "shareUser": "鸿洋",
+ *                 "superChapterId": 494,
+ *                 "superChapterName": "广场Tab",
+ *                 "tags": [
+ *
+ *                 ],
+ *                 "title": "Android Native开发小技巧：实现标准输出重定向",
+ *                 "type": 0,
+ *                 "userId": 2,
+ *                 "visible": 0,
+ *                 "zan": 0
+ *             }
+ *         ],
+ *         "offset": 0,
+ *         "over": false,
+ *         "pageCount": 259,
+ *         "size": 20,
+ *         "total": 5174
+ *     },
+ *     "errorCode": 0,
+ *     "errorMsg": ""
+ * }
+ * ```
+ */
 data class BasicBean<T>(
     var data: T?,
     var errorCode: Int,

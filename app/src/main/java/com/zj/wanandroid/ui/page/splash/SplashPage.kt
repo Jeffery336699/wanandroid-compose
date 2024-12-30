@@ -21,6 +21,7 @@ fun SplashPage(onNextPage: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
+            // wc，纯手打的自定义AppTheme，用于探究官方的Theme设计很有建设意义
             .background(AppTheme.colors.themeUi), contentAlignment = Alignment.TopCenter
     ) {
         LaunchedEffect(Unit) {
