@@ -4,6 +4,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import okhttp3.*
+import okio.Buffer
 import java.io.IOException
 import java.net.URLDecoder
 import javax.inject.Inject
@@ -94,7 +95,8 @@ class LogInterceptor @Inject constructor() : Interceptor {
             "->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->"
         )
         logHeaders(strb, request, connection)
-        strb.appendLine("RequestBody:${request.body().toString()}")
+        // 例如搜索java时，此时是post请求，RequestBody:k=java
+        strb.appendLine("RequestBody:${request.body()?.getRequestBodyContent()}")
         logThat(ColorLevel.VERBOSE(strb.toString()))
     }
 
@@ -153,3 +155,10 @@ class LogInterceptor @Inject constructor() : Interceptor {
 
 }
 
+fun RequestBody.getRequestBodyContent(): String {
+    val buffer = Buffer()
+    // 将 RequestBody 写入 Buffer
+    writeTo(buffer)
+    // 返回 Buffer 的字符串内容
+    return buffer.readUtf8()
+}

@@ -21,7 +21,7 @@ class CategoryViewModel @Inject constructor() : ViewModel() {
 
     override fun onCleared() {
         super.onCleared()
-        println("CategoryViewModel ==> onClear")
+        println("2333333 CategoryViewModel ==> onClear")
     }
 
 }

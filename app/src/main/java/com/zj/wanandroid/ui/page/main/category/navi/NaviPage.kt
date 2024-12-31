@@ -35,7 +35,7 @@ fun NaviPage(navCtrl: NavHostController, viewModel: NaviViewModel = hiltViewMode
                 item {
                     NaviItem(naviBean, onSelected = {
                     })
-                    if (index <= viewStates.size - 1) {
+                    if (index < viewStates.size - 1) {
                         Divider(
                             startIndent = 10.dp,
                             color = AppTheme.colors.divider,

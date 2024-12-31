@@ -16,6 +16,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
@@ -25,6 +26,7 @@ import com.zj.wanandroid.theme.AppTheme
 import com.zj.wanandroid.theme.ToolBarHeight
 import com.zj.wanandroid.ui.widgets.*
 import com.zj.wanandroid.utils.RouteUtils.back
+import com.zj.wanandroid.utils.customBorder
 import kotlinx.coroutines.flow.collect
 
 @ExperimentalComposeUiApi
@@ -82,9 +84,9 @@ fun LoginPage(
             Box(Modifier.fillMaxWidth()) {
                 LargeTitle(
                     title = "WanAndroid",
-                    modifier = Modifier
+                    modifier = Modifier.customBorder(Color.Red)
                         .padding(bottom = 50.dp)
-                        .align(Alignment.Center),
+                        .align(Alignment.Center).customBorder(),
                     color = AppTheme.colors.mainColor
                 )
             }

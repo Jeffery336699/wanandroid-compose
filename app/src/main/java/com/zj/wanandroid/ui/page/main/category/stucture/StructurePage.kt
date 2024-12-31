@@ -13,6 +13,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.google.accompanist.flowlayout.FlowRow
 import com.zj.wanandroid.data.bean.ParentBean
+import com.zj.wanandroid.data.http.PageState
 import com.zj.wanandroid.theme.AppTheme
 import com.zj.wanandroid.ui.page.common.RouteName
 import com.zj.wanandroid.ui.widgets.LabelTextButton
@@ -28,7 +29,7 @@ fun StructurePage(
 ) {
     val viewStates = viewModel.viewStates
 
-    LcePage(pageState = viewStates.pageState, onRetry = {
+    LcePage(pageState = viewStates.pageState/*PageState.Success(true)*/, onRetry = {
         viewModel.dispatch(StructureViewAction.FetchData)
     }) {
         LazyColumn(
@@ -45,7 +46,7 @@ fun StructurePage(
                     StructureItem(chapter1, onSelect = { parent ->
 
                     })
-                    if (position <= viewStates.size - 1) {
+                    if (position < viewStates.size - 1) {
                         Divider(
                             startIndent = 10.dp,
                             color = AppTheme.colors.divider,

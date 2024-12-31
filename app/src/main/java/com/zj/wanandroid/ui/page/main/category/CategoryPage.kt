@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -33,7 +34,19 @@ fun CategoryPage(
     categoryIndex: Int = 0,
     viewModel: CategoryViewModel = hiltViewModel()
 ) {
-
+    DisposableEffect(Unit) {
+        onDispose {
+            // Optimize: 页面虽然销毁了，但是ViewModel采用hiltViewModel()创建的话，
+            //  存在于navigation#BackStack的viewModelStore中，再说其BackStack做了saveState = true的处理，即viewModel不会被销毁;
+            //  如果把Commons#BottomNavBarView底部跳转逻辑的saveState、restoreState设置为false，那么viewModel的onCleared()方法就会被调用
+            /**
+             *  日志如下：
+             *  I  2333333 CategoryViewModel ==> onClear
+             *  I  2333333  CategoryPage onDispose
+             */
+            println("2333333  CategoryPage onDispose")
+        }
+    }
     val titles = viewModel.titles
     Box(modifier = Modifier.padding(bottom = BottomNavBarHeight)) {
         Column {

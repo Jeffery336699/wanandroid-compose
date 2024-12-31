@@ -72,7 +72,7 @@ fun CollectPage(
                             FlowRow(
                                 modifier = Modifier.padding(10.dp)
                             ) {
-                                webUrls?.forEachIndexed { index, website ->
+                                webUrls.forEachIndexed { index, website ->
                                     LabelTextButton(
                                         text = website.name ?: "标签",
                                         modifier = Modifier.padding(end = 10.dp, bottom = 10.dp),

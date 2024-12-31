@@ -47,6 +47,7 @@ class LoginViewModel @Inject constructor(
                 } else {
                     throw Exception(it.errorMsg)
                 }
+            // 上述结果是采用的是抛异常的形式，可以使用onEach/catch来分别处理成功与失败的情况
             }.onEach {
                 AppUserUtil.onLogin(it.result)
                 _viewEvents.send(LoginViewEvent.PopBack)

@@ -38,6 +38,10 @@ class CollectViewModel @Inject constructor(
         }
     }
 
+    /**
+     * 有种先状态到viewStates中一些预先的初始化信息，这个工作一般只需要一次；
+     * 等初始化工作完成后，才是真正的数据请求（精细化的区分）
+     */
     private fun onStart() {
         viewStates = viewStates.copy(isLogged = AppUserUtil.isLogged)
         if (viewStates.isLogged && viewStates.isInit.not()) {

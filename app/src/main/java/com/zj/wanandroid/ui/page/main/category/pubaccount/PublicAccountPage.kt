@@ -22,6 +22,7 @@ import com.zj.wanandroid.data.bean.ParentBean
 import com.zj.wanandroid.theme.AppTheme
 import com.zj.wanandroid.theme.white1
 import com.zj.wanandroid.ui.widgets.LcePage
+import com.zj.wanandroid.utils.customBorder
 
 @ExperimentalFoundationApi
 @Composable
@@ -37,9 +38,9 @@ fun PublicAccountPage(
         LazyVerticalGrid(
             cells = GridCells.Fixed(2),
             modifier = Modifier
-                .background(AppTheme.colors.background)
+                .background(AppTheme.colors.background).customBorder(Color.Blue)
                 .wrapContentHeight()
-                .padding(10.dp),
+                .padding(10.dp).customBorder(),
             state = viewStates.listState
         ) {
             itemsIndexed(viewStates.dataList) { index, item ->

@@ -45,6 +45,8 @@ fun SampleAlertDialog(
             }
         },
         modifier = Modifier
+            // TODO: 可以尝试修改下这个限制？
+            // 默认好像约束，但是超过一定horizontal可以使其缩小点（eg. 30.dp）
             .padding(horizontal = 30.dp)
             .fillMaxWidth()
             .wrapContentHeight()

@@ -82,13 +82,13 @@ fun ProfilePage(
                     HeaderPart(
                         navCtrl = navCtrl,
                         userInfo = userInfo,
-                        messageCount = 0
+                        messageCount = 2
                     )
                 }
                 item {
                     FooterPart(
                         navCtrl = navCtrl,
-                        messageCount = 0,
+                        messageCount = 3,
                         onLogout = {
                             viewModel.dispatch(ProfileViewAction.ShowLogoutDialog)
                         })
