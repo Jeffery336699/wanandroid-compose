@@ -62,7 +62,13 @@ class RecommendViewModel @Inject constructor(
                     viewStates.copy(imageList = banners, topArticles = tops, isRefreshing = false)
             }.onStart {
                 viewStates = viewStates.copy(isRefreshing = true)
-            }.catch {
+                /**
+                 * 1. 在Flow中，catch操作符在没有异常的情况下是不会执行其代码块的
+                 * 2. 如果你想无论Flow成功或异常都执行某些逻辑，可以使用onCompletion操作符
+                 * 3. 如果内部发生异常，就算在外面用catch操作符捕获了异常，最终程序仍然会终止
+                 *  （可以理解为你没有把根源地方try..catch操作，发现时已经是表现出来的外像了）
+                 */
+            }.onCompletion {
                 viewStates = viewStates.copy(isRefreshing = false)
             }.collect()
         }

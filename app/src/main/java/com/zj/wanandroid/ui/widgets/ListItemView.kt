@@ -364,10 +364,10 @@ fun MultiStateItemView(
                         start.linkTo(name.end, margin = 5.dp)
                     }
             ) {
-                if (isTop||true) {
+                if (isTop/*||true*/) {
                     HotIcon()
                 }
-                if (data.fresh||true) {
+                if (data.fresh/*||true*/) {
                     TagView(
                         tagText = "最新",
                         modifier = Modifier

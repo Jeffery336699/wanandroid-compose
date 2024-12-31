@@ -5,17 +5,34 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.*
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.changedToDownIgnoreConsumed
+import androidx.compose.ui.input.pointer.changedToUpIgnoreConsumed
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.positionChangeConsumed
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -24,7 +41,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.zj.wanandroid.R
-import com.zj.wanandroid.theme.AppShapes
+import com.zj.wanandroid.utils.customBorder
 import kotlinx.coroutines.delay
 
 /**
@@ -50,13 +67,16 @@ fun Banner(
             .fillMaxWidth()
             .padding(16.dp)
             .height(120.dp)
+            .customBorder(width = 3.dp)
     ) {
 
         if (list == null) {
             //加载中的图片
             Image(
                 painterResource(loadImage),
-                modifier = Modifier.fillMaxSize().clip(shape = RoundedCornerShape(16.dp)),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(shape = RoundedCornerShape(16.dp)),
                 contentDescription = null,
                 contentScale = ContentScale.Crop
             )
@@ -83,6 +103,7 @@ fun Banner(
                 count = list.size,
                 state = pagerState,
                 modifier = Modifier
+                    // TODO: 大无语，这个里面的逻辑注释掉否与效果都差不多？！
                     .pointerInput(pagerState.currentPage) {
                         awaitPointerEventScope {
                             while (true) {
@@ -97,13 +118,16 @@ fun Banner(
                                     }
                                     //是否已经按下(忽略按下手势已消费标记)
                                     dragEvent.changedToDownIgnoreConsumed() -> {
+                                        println("按下 changedToDownIgnoreConsumed")
                                         //记录下当前的页面索引值
                                         currentPageIndex = pagerState.currentPage
                                     }
                                     //是否已经抬起(忽略按下手势已消费标记)
                                     dragEvent.changedToUpIgnoreConsumed() -> {
+                                        println("11 抬起 changedToUpIgnoreConsumed")
                                         //当页面没有任何滚动/动画的时候pagerState.targetPage为null，这个时候是单击事件
                                         if (pagerState.targetPage == null) return@awaitPointerEventScope
+                                        println("22 抬起 changedToUpIgnoreConsumed")
                                         //当pageCount大于1，且手指抬起时如果页面没有改变，就手动触发动画
                                         if (currentPageIndex == pagerState.currentPage && pagerState.pageCount > 1) {
                                             executeChangePage = !executeChangePage
@@ -122,7 +146,9 @@ fun Banner(
             ) { page ->
                 Image(
                     painter = rememberCoilPainter(list[page].imageUrl),
-                    modifier = Modifier.fillMaxSize().clip(shape = RoundedCornerShape(16.dp)),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(shape = RoundedCornerShape(16.dp)),
                     contentScale = ContentScale.Crop,
                     contentDescription = null
                 )
@@ -164,12 +190,9 @@ fun Banner(
                         )
                     }
                 }
-
             }
         }
-
     }
-
 }
 
 /**

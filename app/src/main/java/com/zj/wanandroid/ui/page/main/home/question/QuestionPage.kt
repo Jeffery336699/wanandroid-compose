@@ -105,6 +105,10 @@ private fun WenDaItem(article: Article, isLoading: Boolean = false, onClick: () 
                 maxLines = 3,
                 modifier = Modifier
                     .fillMaxWidth()
+                    /**
+                     * 1. 通过合理使用defaultMinSize，可以避免 UI 中因过小尺寸导致的问题
+                     * 2. defaultMinSize是一个默认值，如果明确设置了更小的size属性，defaultMinSize的效果会被覆盖。
+                     */
                     .defaultMinSize(minHeight = 60.dp),
                 isLoading = isLoading
             )
